@@ -1,0 +1,1 @@
+Changed the TX control port selection dialog to support devices other than ttyS[0-3] and lp[0-1]; now any device in /dev is supported, just enter its name in the port selection dialog.

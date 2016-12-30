@@ -1,0 +1,179 @@
+README for glfer 0.4.2 (29 Jan 2010)       by Claudio Girardi, IN3OTD
+
+
+Operating
+---------
+*** Please note that you will need to run the program with root
+*** privileges to gain access to the transmitter control (parallel or
+*** serial) port; you can use sudo ('sudo glfer') for this.
+
+glfer was designed for transmitting and receiving QRSS/DFCW
+transmissions, as used by hams mainly on the 137 and 73 kHz bands.
+It is composed of two main parts:
+ - the spectrogram window
+ - the TX keying functions
+
+Almost all the program functions have their own help; just keep the
+mouse pointer over a input box or on a button for more than a second
+and a brief explanation will appear.
+Try "glfer -h" for a list of all command line options.
+
+
+The spectrogram window shows the estimated spectrum for the input
+signal vs. time; input can be taken from the soundcard or from a WAV
+file specified on the command line with the "-f" switch or opened
+through the File/Open menu.
+
+Starting from release 0.3, it is possible to select a spectral
+estimator among several different types: 
+
+ - the "classical" periodogram, which is obtained as the squared modulus
+   of the discrete Fourier transform, after tapering the data with a
+   "window function" selectable among the Hanning, Blackman, Gaussian,
+   Welch, Bartlett, Rectangular, Hamming and Kaiser types. As usual,
+   the FFT number of points and the overlap between data blocks can be
+   freely changed.
+
+ - the multitaper method, which is a weighted combination of periodograms
+   computed with different windows, all belonging to the same family and
+   having certain peculiar properties.
+   This method was described by David J. Thomson in "Spectrum
+   Estimation and Harmonic Analysis", Proc. IEEE, vol.70, Sep. 1982.
+   Besides the FFT size and overlap, it is possible to change also a
+   relative bandwidth parameter and the number of windows used for
+   the analysis.	 
+
+   This method requires more CPU power than the first one, due to the
+   fact that several FFTs are performed on the same block of data,
+   using different windows. The resulting spectrum is similar to a
+   classical periodogram, but with much less variance (i.e. less
+   variation in the background noise [speckle]). Performances are also
+   similar to the periodogram, maybe it makes detection of QRSS
+   signals a little easier, but this doesn't means they are always
+   more readable.   
+
+ - a (so called) "high performance" ARMA model, which assumes a
+   certain model for the input data (in this case it assumes white
+   noise plus sinusoids, rather strange eh? 8-)) and tries to extract
+   the parameters of this model (sinusoids frequency and strenght)
+   from the data.
+   Reference article for this implementation is "Spectral Estimation:
+   An Overdetermined Rational Model Equation Approach", by James
+   A. Cadzow, Proc. IEEE, vol.70, Sep. 1982.
+
+   At present this method is still experimental. There are two
+   parameters that can be varied: t is the number of samples used for
+   computing the samples autocorrelation and p_e is the order of the
+   AR model. This latter must be less than t, and both number should
+   be fairly small in order not to overload the CPU. The number of
+   sinusoids is estimated autimatically from the samples autocorrelation. 
+   Use the default numbers as a starting point and experiment!
+   Unfortunately this spectral estimator performs poorly with
+   non-white noise (as we have usually in the RX audio, due to the IF
+   filters) and high noise levels. On the other hand it provides a
+   very good visual SNR with signals not buried in the noise... I will
+   try different related methods in the future, in the hope of finding
+   one really useful for digging weak signals out of noise.
+
+ - LMP estimator
+
+The spectrogram window has an automatic gain control which is enabled
+by default; you can choose fixed limits for the display in the Display
+options tab.
+The spectrogram display can be saved as a graphics image; you can
+choose to save the entire window or to select a rectangular
+region to save with the mouse.
+
+
+The transmitter control part of the program is capable of keying the PA
+according to the QRSS (slow CW) or DFCW modes. The transmission
+timing, as dot length and PTT delay, can be freely varied. 
+A sidetone function can be used as a monitor for the transmission and
+gives also the two (freely selectable) tones for DFCW. If you do not
+hear any sound after enabling the sidetone please check that the
+'pcspkr' module is loaded ('lsmod | grep pcspkr' as root); if it is
+not, check that loading of that module is not disabled in
+'/etc/modprobe.d/blacklist' .
+
+The TX can be controlled through the serial or the parallel port; the
+pins used for PTT and KEY are the same used also in other digital
+modes programs (and also the same as in Rik Strobbe QRS).
+For the serial port, enter the serial port name in the control port
+dialog (e.g. ttyS0 or ttyUSB0). Pin assignment is RTS = key and DTR =
+PTT/DFCW .
+For the parallel port, enter the parallel port name in the control port
+dialog (e.g. lp0 or lp1). Pin assignment is DB0 = key, DB1 = PTT/DFCW .
+
+
+Compiling
+---------
+To compile glfer, after extracting the tar archive to a suitable
+directory (which you should have done already since you are reading
+this...), it should be sufficient just to type
+
+./configure
+make
+
+and at the end of the compilation you should have the executable file,
+named glfer. See the file INSTALL for detailed, generic, instructions.
+Please let me know of any strange warning message during compilation
+or (even worse) if the compilation fails; it would be helpful to have the
+configure and make outputs in a file (for example: make > log.txt 2>&1
+) for a better analysis.
+
+The first time you run glfer you will be asked to select a control
+port (serial or parallel) for the TX; if your mouse is connected to
+the serial port be sure NOT to select its serial port for controlling
+the TX, otherwise a mouse freeze may occur. All the settings can be
+saved to a configuration file; in this case they will be automatically
+reloaded when glfer starts.
+
+*** Please note that you will need to run the program as root (or suid
+*** root) to gain access to the transmitter control (parallel or serial)
+*** port.
+
+
+The FFTW library, by Matteo Frigo and Steven G. Johnson, is not needed
+to compile glfer, but will be used if available. 
+The FFTW library can be found at FFTW home page, http://www.fftw.org .
+
+To adjust the soundcard input sensitivity you can use the mixer
+control program installed on your system (e.g. aumixer or alsamixer)
+or the mixer program, which is included in the sources and compiled
+with glfer. To quickly select the line input instead of the mic input,
+which is usually the default, you can just type "mixer +rec line"
+
+
+The program source code contains parts derived from:
+
+xspectrum by Vincent Arkesteijn 
+specgrm2 by  Philip VanBaren 
+Geg by David Bryant
+Octave files for computing the Slepian tapers by John Kuehne
+Some gsl (GNU Scientific Library) files by Gerard Jungman
+bell-p-w.f by Brad Bell, Don Percival and Andrew Walden
+bplay by David Monro 
+
+and most of the features available in it are shamelessy copied from :
+
+QRS by Rik Strobbe, ON7YD  http://www.qsl.net/on7yd/
+EasyGram by Petr Maly, OK1FIG; http://www.mujweb.cz/www/OK1FIG/136k.htm
+Spectrogram by Richard S. Horne; http://www.monumental.com/rshorne/gram.html
+
+I would like to thank all the above authors for making their nice programs
+available to the ham community.
+
+
+Should you have any suggestion, found one of the many bugs, want to
+add some feature or to correct my english, please drop me a note. 
+
+For the latest version please check http://www.qsl.net/in3otd/
+
+                          73 de Claudio, IN3OTD
+                             <in3otd@qsl.net>
+
+
+Local Variables:
+mode:indented-text
+mode:auto-fill
+End:

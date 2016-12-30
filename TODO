@@ -1,0 +1,31 @@
+Please tell me <in3otd@qsl.net> if you feel like volunteering for any
+of these ideas. 
+
+Features or problems that need some work:
+----------------------------------------
+	handle MP3 format
+	record input to a file
+	There was some report of problems in the audio acquisition
+	  routine, it seems that some audio card/driver don't work
+	  well with select; this need further investigation
+	Spectrogram "normal" scrolling (all the picture, right to left)
+	Jason decoder (in progress)
+	JPEG quality should be selectable before saving
+        Palette editor and loader
+	XPM icon for glfer
+	...many other things...
+
+
+Code cleanups and optimizations:
+-------------------------------
+
+	Check DFCW code
+	File not beginning with "g_" should not need to include gtk/gtk.h
+	Pay attention to WMCLASS (gtk_window_set_wmclass) (important ?)
+
+
+
+Local Variables:
+mode:indented-text
+mode:auto-fill
+End:

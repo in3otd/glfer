@@ -1,0 +1,44 @@
+2010-01-29 Claudio Girardi  <in3otd@qsl.net>
+	* Released 0.4.2
+	* Changed TX control port selection dialog to support devices other than ttyS[0-3] and lp[0-1]
+2008-10-07 Claudio Girardi  <in3otd@qsl.net>
+	* Released 0.4.1
+	* Corrected a bug in the FFT window type selection when loading preferences from file (thanks to Rick Kunath for reporting the bug)
+
+2008-09-14 Claudio Girardi  <in3otd@qsl.net>
+	* Lots of changes since the last released version: the following is just an incomplete list...
+	* Released 0.4.0
+	* Ported to GTK+ 2.x
+	* Included patch from Edouard Griffiths for averaging the spectrum
+	* Rik van Riel patch to avoid cpu hogging
+	* Corrected computation of DPSS tapers for MTM analysis mode
+	* Normalized windows
+	* Added a simple scope window
+	* Changed #include <linux/kd.h> to #include <sys/kd.h> in qrs.c for better portability
+	* Corrected the FSF address everywhere.
+
+2004-09-01 Claudio Girardi  <in3otd@qsl.net>
+	* Released 0.3.4
+	* Added beacon mode
+	* Included and extended a patch from Roberto Tumiati to have a 
+	  visual threshold on the spectrogram display
+	
+2003-07-27  Claudio Girardi  <in3otd@qsl.net>
+	* Released 0.3.3, after a limited pre-distribution
+	* Included a little patch from Joop Stakenborg for architectures 
+          without sys/io.h (ioperm, inb and outb functions)
+	* Changed the sound acquisition method (not using select() anymore)
+
+2002-10-15  Claudio Girardi  <in3otd@qsl.net>
+	* Released 0.3.1
+	* Added possibility of nonlinear processing to FFT as suggested by 
+	  RA9MB and selectable limiter on input signal
+	* Corrected dependencies on fftw
+	
+2002-10-09  Claudio Girardi  <in3otd@qsl.net>
+
+	* Released 0.3
+	* New spectral estimator added
+	* Added left bar showing current estimated spectrum
+	* Some general rework
+

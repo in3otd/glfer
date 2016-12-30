@@ -1,0 +1,49 @@
+These are some brief notes for the brave people attempting to
+understand and (hopefully) improve the sources; as you will have 
+already noticed, I am not a professional programmer, only a ham who
+likes writing C code in his spare time, trying to solve some practical
+problem (and often ending creating new ones). I began to write glfer
+to have a versatile spectrogram software to use with Linux and also to
+learn how to use the Gtk+ library; I don't know if I really succeeded
+in one of these goals 8-)
+
+Anyway, here is some info about the code (dis)organization:
+
+* files containing code for the user interface, thus needing Gtk+,
+  have names beginning with "g_" 
+* files containing "low-level" functions (i.e. fft, audio, writing/reading 
+  files, etc) do not have such "g_" prefix.
+* exception to the above rules (what will be a rule without an
+  exception ? 8-) ) is the main file glfer.c
+
+
+To compile glfer you should need a Unix system with an ANSI C compiler
+and the Gtk+ library. The fftw library will be used for the FFT
+calculations, if available, otherwise glfer will use its own fft
+routine.
+On the other hand if you want to make changes to the code (please
+contribute with your ideas !) you will need the following tools to
+generate the Makefile and the configuration scripts:
+
+Autoconf - available at "ftp://ftp.gnu.org/pub/gnu/autoconf"
+Automake - available at "ftp://ftp.gnu.org/pub/gnu/automake"
+
+You can define the DEBUG flag (and obtain a lot of debug messages at
+runtime) by passing --enable-debug to the configure script. If you
+have the dmalloc debugging library installed you can enable it passing
+--enable-dmalloc to the configure script.
+The Debug Malloc Library, by Gray Watson, is available at
+http://dmalloc.com/ ; I used Version 4.8.2 (February 2001)
+
+
+                       73 de Claudio, IN3OTD
+                         <in3otd@qsl.net>
+
+
+Local Variables:
+mode:indented-text
+mode:auto-fill
+End:
+  
+
+
